@@ -1,7 +1,7 @@
 from google import genai
 from dotenv import load_dotenv
 import os
-
+import traceback
 
 load_dotenv()
 
@@ -41,12 +41,12 @@ def generate_tweet(title, summary):
         )
 
         if response.text:
-            return response.text
+            return response.text.strip()
 
         return None
 
     except Exception as e:
-
+        traceback.print_exc()
         print(f"Gemini Error: {e}")
 
         return None
