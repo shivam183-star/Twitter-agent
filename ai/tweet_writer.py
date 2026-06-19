@@ -30,7 +30,7 @@ def generate_tweet(title, summary):
     {title}
 
     Summary:
-    {summary}
+    {short_summary}
     """
 
     try:
