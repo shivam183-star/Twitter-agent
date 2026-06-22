@@ -51,11 +51,3 @@ def generate_tweet(title, summary):
 
         return None
     
-
-
-tweet = generate_tweet(
-    "China expands military drills near Taiwan",
-    "China increased naval activity near Taiwan amid rising regional tensions."
-)
-
-print(tweet)

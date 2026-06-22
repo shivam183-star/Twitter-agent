@@ -3,7 +3,6 @@ from news.scorer import score_article
 from ai.duplicate_checker import is_duplicate
 from ai.tweet_writer import generate_tweet
 
-
 MINIMUM_SCORE = 8
 
 
@@ -15,54 +14,43 @@ def run_news_pipeline():
 
     print(f"Found {len(articles)} articles\n")
 
-    important_count = 0
-
-    for i, article in enumerate(articles[:5]):
-
-        print("=" * 60)
-        print(f"Processing Article {i+1}")
+    for article in articles:
 
         title = article["title"]
         summary = article["summary"]
 
+        if len(summary) < 50:
+            continue
+
         score = score_article(title, summary)
 
-        print(f"Title: {title}")
+        print(f"Checking: {title}")
         print(f"Score: {score}")
 
-        if score >= MINIMUM_SCORE:
-            if len(summary) < 50:
-                continue
+        if score < MINIMUM_SCORE:
+            continue
 
-            duplicate = is_duplicate(title, summary)
+        if is_duplicate(title, summary):
+            continue
 
-            if duplicate:
-                print("Skipping duplicate article...\n")
-                continue
+        print("\nIMPORTANT ARTICLE FOUND\n")
 
-            important_count += 1
+        print(title)
 
-            print("\nIMPORTANT ARTICLE DETECTED\n")
+        print("\nGenerating tweet...\n")
 
-            print("Headline:")
-            print(title)
+        tweet = generate_tweet(title, summary)
 
-            print("\nSummary:")
-            print(summary)
+        if tweet:
 
-            tweet = generate_tweet(title, summary)
+            print("\nGenerated Tweet:\n")
+            print(tweet)
 
-            if tweet:
+            # save to database here
 
-                print("\nGenerated Tweet:\n")
-  
-                print(tweet)
+            print("\nStopping after first valid article.")
+            return
 
-                print("\n")
+    print("\nNo suitable article found.")
 
-    print("=" * 60)
-    print(f"\nImportant Articles Found: {important_count}")
-
-
-if __name__ == "__main__":
-    run_news_pipeline()
+run_news_pipeline()
