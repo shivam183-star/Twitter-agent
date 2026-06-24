@@ -2,6 +2,7 @@ from news.fetcher import fetch_articles
 from news.scorer import score_article
 from ai.duplicate_checker import is_duplicate
 from ai.tweet_writer import generate_tweet
+from news.sender import send_message
 
 MINIMUM_SCORE = 8
 
@@ -46,7 +47,23 @@ def run_news_pipeline():
             print("\nGenerated Tweet:\n")
             print(tweet)
 
-            # save to database here
+            message = f"""
+HEADLINE
+
+{title}
+
+SCORE - {score}
+
+SOURCE - {article['link']}
+
+DRAFT TWEET
+
+{tweet}
+                """
+
+            send_message(message)
+
+            print("Draft sent to Telegram.")
 
             print("\nStopping after first valid article.")
             return

@@ -25,6 +25,7 @@ def generate_tweet(title, summary):
     - No markdown
     - No intro text
     - Sound like professional tweet
+    - Simple understandable english
 
     Title:
     {title}

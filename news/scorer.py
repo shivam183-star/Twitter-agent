@@ -10,7 +10,7 @@ KEYWORDS = {
     "nato": 4,
     "election": 3,
     "conflict": 5,
-    "attack": 5,
+    "attacks": 5,
     "iran": 4,
     "israel": 4,
     "ukraine": 5,
