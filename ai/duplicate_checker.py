@@ -47,3 +47,35 @@ def clear_history() -> None:
 
 def get_history() -> List[str]:
     return list(_stored_articles)
+
+
+PROCESSED_FILE = "processed_articles.txt"
+MAX_URLS = 1000
+
+def already_processed(url):
+
+    try:
+        with open(PROCESSED_FILE, "r", encoding="utf-8") as f:
+            processed_urls = set(line.strip() for line in f)
+
+        return url in processed_urls
+
+    except FileNotFoundError:
+        return False
+
+
+def save_processed(url):
+
+    try:
+        with open(PROCESSED_FILE, "r", encoding="utf-8") as f:
+            urls = [line.strip() for line in f]
+
+    except FileNotFoundError:
+        urls = []
+
+    urls.append(url)
+
+    urls = urls[-MAX_URLS:]
+
+    with open(PROCESSED_FILE, "w", encoding="utf-8") as f:
+        f.write("\n".join(urls))

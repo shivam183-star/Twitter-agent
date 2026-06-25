@@ -1,6 +1,6 @@
 from news.fetcher import fetch_articles
 from news.scorer import score_article
-from ai.duplicate_checker import is_duplicate
+from ai.duplicate_checker import is_duplicate, already_processed, save_processed
 from ai.tweet_writer import generate_tweet
 from news.sender import send_message
 import logging
@@ -27,6 +27,10 @@ def run_news_pipeline():
 
         title = article["title"]
         summary = article["summary"]
+        url = article["link"]
+        if already_processed(url):
+            print("Already processed article.")
+            continue
 
         if len(summary) < 50:
             continue
@@ -73,6 +77,7 @@ DRAFT TWEET
             send_message(message)
 
             print("Draft sent to Telegram.")
+            save_processed(url)
 
             print("\nStopping after first valid article.")
             return
