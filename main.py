@@ -3,6 +3,8 @@ from news.scorer import score_article
 from ai.duplicate_checker import is_duplicate, already_processed, save_processed
 from ai.tweet_writer import generate_tweet
 from news.sender import send_message
+from news.image_extractor import extract_image
+from news.image_downloader import download_image
 import logging
 
 logging.basicConfig(
@@ -52,36 +54,40 @@ def run_news_pipeline():
 
         print("\nGenerating tweet...\n")
 
-        tweet = generate_tweet(title, summary)
+        # tweet = generate_tweet(title, summary)
+        image_url = extract_image(url)
+        image_path = download_image(image_url)
+        print(image_path)
+        break
 
-        if tweet:
+#         # if tweet:
 
-            print("\nGenerated Tweet:\n")
-            print(tweet)
-            logging.info(f"Draft sent: {title}")
+#             print("\nGenerated Tweet:\n")
+#             # print(tweet)
+#             logging.info(f"Draft sent: {title}")
 
-            message = f"""
-HEADLINE
+#             message = f"""
+# HEADLINE
 
-{title}
+# {title}
 
-SCORE - {score}
+# SCORE - {score}
 
-SOURCE - {article['link']}
+# SOURCE - {article['link']}
 
-DRAFT TWEET
+# DRAFT TWEET
 
-{tweet}
-                """
+# {tweet}
+#                 """
 
-            send_message(message)
+#             send_message(message)
 
-            print("Draft sent to Telegram.")
-            save_processed(url)
+#             print("Draft sent to Telegram.")
+#             save_processed(url)
 
-            print("\nStopping after first valid article.")
-            return
+#             print("\nStopping after first valid article.")
+#             return
 
-    print("\nNo suitable article found.")
+#     print("\nNo suitable article found.")
 
 run_news_pipeline()
